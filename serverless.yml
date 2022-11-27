@@ -1,0 +1,74 @@
+service: linkou-gatway
+
+frameworkVersion: "3"
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    SERVICE: ${self:service}
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    NO_COLOR: ${env:NO_COLOR, 'true'}
+  apiGateway:
+    shouldStartNameWithService: true
+
+custom:
+  apiKeys:
+    dev:
+      - name: linkou-gatway-key-dev
+    usagePlan:
+    quota:
+      limit: 100000
+      period: MONTH
+    throttle:
+      rateLimit: 5
+      burstLimit: 10
+    prod:
+      - name: linkou-gatway-key-prod
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dotenv-plugin
+  - serverless-offline
+  - serverless-add-api-key
+
+  
+
+functions:
+  graphql:
+    handler: src/index.handler
+    events:
+      - http:
+          cors: true
+          path: 'graphql'
+          method: post
+          private: true
+      - http:
+          cors: true
+          path: 'graphql'
+          method: get
+          private: true
+          
+package:
+  excludeDevDependencies: true
+  patterns:
+    - '!node_modules/.prisma/client/libquery_engine-*'
+    - 'node_modules/.prisma/client/libquery_engine-rhel-*'
+    - '!node_modules/.prisma/client/query_engine-windows.dll'
+    - '!node_modules/prisma/libquery_engine-*'
+    - '!node_modules/@prisma/engines/**'
+    - '!.gitignore'
+    - '!nest-cli.json'
+    - '!.tsbuildinfo'
+    - '!README.md'
+    - '!yarn.lock'
+    - '!yarn-error.log'
+    - '!node_modules/aws_sdk/**'
+    - '!.git/**'
+
+
+
