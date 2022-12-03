@@ -12,6 +12,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
 
   willSendRequest({ request, context }: GraphQLDataSourceProcessOptions<Record<string, any>>) {
     if (context['req']) {
+      console.log('hits is request')
       request?.http?.headers.set('x-api-key', process.env.X_API_KEY as string);
       request?.http?.headers.set('authorization', context['req']['headers']['authorization']);
     }
@@ -32,12 +33,12 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
         },
         serviceList: [
           { name: 'profile', url: process.env.PROFILE_API, },
-          { name: 'occupationAreaProfile', url: process.env.OCUPATION_AREA_PROFILE },
+          { name: 'businessProfile', url: process.env.OCUPATION_AREA_PROFILE },
         ],
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
             { name: 'profile', url: process.env.PROFILE_API, },
-            { name: 'occupationAreaProfile', url: process.env.OCUPATION_AREA_PROFILE },
+            { name: 'businessProfile', url: process.env.OCUPATION_AREA_PROFILE },
           ],
           introspectionHeaders() {
             return {
