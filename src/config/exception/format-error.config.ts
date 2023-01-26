@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql';
 export function formatErrorConfig(error: GraphQLError) {
   if (isBusinessError(error)) {
     return {
-      message: 'Pantheon Error',
+      message: 'Fonte Error',
       extensions: {
         pantheonErrors: error.extensions.exception,
       },
