@@ -5,7 +5,7 @@ export function formatErrorConfig(error: GraphQLError) {
     return {
       message: 'Fonte Error',
       extensions: {
-        pantheonErrors: error.extensions.exception,
+        fonteErrors: error.extensions.exception,
       },
     };
   }
